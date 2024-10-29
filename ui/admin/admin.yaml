@@ -1,0 +1,424 @@
+about:
+  date: October 29, 2024 14:05:49
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 12
+  number_tables: 15
+info_toggle_checked: true
+resources:
+  Administrator:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: email
+      required: true
+    - name: id
+    description: Represents a business administrator who can view records.
+    info_list: Represents a business administrator who can view records.
+    type: Administrator
+    user_key: name
+  Dog:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: owner_id
+      required: true
+    - name: size
+      required: true
+    - name: notes
+    - name: id
+    - name: breed
+    description: Represents a dog belonging to an owner.
+    info_list: Represents a dog belonging to an owner.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - dog_id
+      name: WalkRequestDogList
+      resource: WalkRequestDog
+    - direction: toone
+      fks:
+      - owner_id
+      name: owner
+      resource: Owner
+    type: Dog
+    user_key: name
+  DogSizePriceHistory:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: walker_id
+      required: true
+    - name: dog_size
+      required: true
+    - name: price
+      required: true
+    - name: effective_date
+      type: DATETIME
+    description: Maintains a history of price changes for dog sizes.
+    info_list: Maintains a history of price changes for dog sizes.
+    tab_groups:
+    - direction: toone
+      fks:
+      - walker_id
+      name: walker
+      resource: Walker
+    type: DogSizePriceHistory
+    user_key: id
+  Feedback:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: user_type
+      required: true
+    - name: feedback_text
+      required: true
+    - name: feedback_date
+      type: DATETIME
+    - name: user_id
+      required: true
+    description: Stores feedback from owners or walkers about the service.
+    info_list: Stores feedback from owners or walkers about the service.
+    type: Feedback
+    user_key: id
+  Notification:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: recipient_type
+      required: true
+    - name: message
+      required: true
+    - name: sent_date
+      type: DATETIME
+    - name: recipient_id
+      required: true
+    description: Manages notifications sent to owners and walkers.
+    info_list: Manages notifications sent to owners and walkers.
+    type: Notification
+    user_key: id
+  Owner:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: address
+      required: true
+    - name: phone
+      required: true
+    - name: email
+      required: true
+    - name: id
+    description: Represents a dog owner who registers and can request walks.
+    info_list: Represents a dog owner who registers and can request walks.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - owner_id
+      name: DogList
+      resource: Dog
+    - direction: tomany
+      fks:
+      - owner_id
+      name: ReviewList
+      resource: Review
+    - direction: tomany
+      fks:
+      - owner_id
+      name: WalkRequestList
+      resource: WalkRequest
+    type: Owner
+    user_key: name
+  Payment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: walk_request_id
+      required: true
+    - name: payment_date
+      type: DATETIME
+    - name: amount
+      required: true
+    description: Represents payments made to walkers after a walk is completed.
+    info_list: Represents payments made to walkers after a walk is completed.
+    tab_groups:
+    - direction: toone
+      fks:
+      - walk_request_id
+      name: walk_request
+      resource: WalkRequest
+    type: Payment
+    user_key: id
+  Review:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: owner_id
+      required: true
+    - name: walker_id
+      required: true
+    - name: rating
+      required: true
+    - name: comments
+    description: Stores reviews for walkers provided by owners.
+    info_list: Stores reviews for walkers provided by owners.
+    tab_groups:
+    - direction: toone
+      fks:
+      - owner_id
+      name: owner
+      resource: Owner
+    - direction: toone
+      fks:
+      - walker_id
+      name: walker
+      resource: Walker
+    type: Review
+    user_key: id
+  SystemLog:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: action_desc
+      required: true
+    - name: timestamp
+      type: DATETIME
+    description: Logs actions and events in the system for auditing.
+    info_list: Logs actions and events in the system for auditing.
+    type: SystemLog
+    user_key: id
+  WalkRequest:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: owner_id
+      required: true
+    - name: walker_id
+      required: true
+    - name: request_date
+      type: DATETIME
+    - name: status
+      required: true
+    description: Records requests made by owners to walk their dogs.
+    info_list: Records requests made by owners to walk their dogs.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - walk_request_id
+      name: PaymentList
+      resource: Payment
+    - direction: tomany
+      fks:
+      - walk_request_id
+      name: WalkRequestDogList
+      resource: WalkRequestDog
+    - direction: toone
+      fks:
+      - owner_id
+      name: owner
+      resource: Owner
+    - direction: toone
+      fks:
+      - walker_id
+      name: walker
+      resource: Walker
+    type: WalkRequest
+    user_key: id
+  WalkRequestDog:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: dog_id
+      required: true
+    - name: walk_request_id
+      required: true
+    description: Associates dogs with walk requests.
+    info_list: Associates dogs with walk requests.
+    tab_groups:
+    - direction: toone
+      fks:
+      - dog_id
+      name: dog
+      resource: Dog
+    - direction: toone
+      fks:
+      - walk_request_id
+      name: walk_request
+      resource: WalkRequest
+    type: WalkRequestDog
+    user_key: id
+  Walker:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: postal_code
+      required: true
+    - name: phone
+      required: true
+    - name: email
+      required: true
+    - name: max_dogs_per_walk
+      required: true
+    - name: morning_available
+    - name: afternoon_available
+    - name: id
+    description: Represents a dog walker who can self-register and provide availability.
+    info_list: Represents a dog walker who can self-register and provide availability.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - walker_id
+      name: DogSizePriceHistoryList
+      resource: DogSizePriceHistory
+    - direction: tomany
+      fks:
+      - walker_id
+      name: ReviewList
+      resource: Review
+    - direction: tomany
+      fks:
+      - walker_id
+      name: WalkRequestList
+      resource: WalkRequest
+    - direction: tomany
+      fks:
+      - walker_id
+      name: WalkerAvailabilityList
+      resource: WalkerAvailability
+    - direction: tomany
+      fks:
+      - walker_id
+      name: WalkerHistoryList
+      resource: WalkerHistory
+    - direction: tomany
+      fks:
+      - walker_id
+      name: WalkerPriceList
+      resource: WalkerPrice
+    type: Walker
+    user_key: name
+  WalkerAvailability:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: walker_id
+      required: true
+    - name: day_of_week
+      required: true
+    description: Represents the days a walker is available.
+    info_list: Represents the days a walker is available.
+    tab_groups:
+    - direction: toone
+      fks:
+      - walker_id
+      name: walker
+      resource: Walker
+    type: WalkerAvailability
+    user_key: id
+  WalkerHistory:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: walker_id
+      required: true
+    - name: walk_date
+      type: DATETIME
+    - name: number_of_dogs
+      required: true
+    description: Tracks the walking history of a walker.
+    info_list: Tracks the walking history of a walker.
+    tab_groups:
+    - direction: toone
+      fks:
+      - walker_id
+      name: walker
+      resource: Walker
+    type: WalkerHistory
+    user_key: id
+  WalkerPrice:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: walker_id
+      required: true
+    - name: dog_size
+      required: true
+    - name: price
+      required: true
+    description: Stores pricing details for different dog sizes by each walker.
+    info_list: Stores pricing details for different dog sizes by each walker.
+    tab_groups:
+    - direction: toone
+      fks:
+      - walker_id
+      name: walker
+      resource: Walker
+    type: WalkerPrice
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

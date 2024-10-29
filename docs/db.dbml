@@ -1,0 +1,152 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Administrator: Represents a business administrator who can view records.
+Dog: Represents a dog belonging to an owner.
+Owner: Represents a dog owner who registers and can request walks.
+DogSizePriceHistory: Maintains a history of price changes for dog sizes.
+Walker: Represents a dog walker who can self-register and provide availability.
+Feedback: Stores feedback from owners or walkers about the service.
+Notification: Manages notifications sent to owners and walkers.
+Payment: Represents payments made to walkers after a walk is completed.
+WalkRequest: Records requests made by owners to walk their dogs.
+Review: Stores reviews for walkers provided by owners.
+SystemLog: Logs actions and events in the system for auditing.
+WalkRequestDog: Associates dogs with walk requests.
+WalkerAvailability: Represents the days a walker is available.
+WalkerHistory: Tracks the walking history of a walker.
+WalkerPrice: Stores pricing details for different dog sizes by each walker.
+'''
+}
+
+Table Administrator {
+    id INTEGER [primary key]
+    name VARCHAR 
+    email VARCHAR 
+    }
+
+Table Dog {
+    id INTEGER [primary key]
+    owner_id INTEGER 
+    name VARCHAR 
+    breed VARCHAR 
+    size VARCHAR(6) 
+    notes VARCHAR 
+    }
+
+Table Owner {
+    id INTEGER [primary key]
+    name VARCHAR 
+    address VARCHAR 
+    phone VARCHAR 
+    email VARCHAR 
+    }
+
+Table DogSizePriceHistory {
+    id INTEGER [primary key]
+    walker_id INTEGER 
+    dog_size VARCHAR(6) 
+    price FLOAT 
+    effective_date DATETIME 
+    }
+
+Table Walker {
+    id INTEGER [primary key]
+    name VARCHAR 
+    postal_code VARCHAR 
+    phone VARCHAR 
+    email VARCHAR 
+    max_dogs_per_walk INTEGER 
+    morning_available BOOLEAN 
+    afternoon_available BOOLEAN 
+    }
+
+Table Feedback {
+    id INTEGER [primary key]
+    user_type VARCHAR(13) 
+    user_id INTEGER 
+    feedback_text VARCHAR 
+    feedback_date DATETIME 
+    }
+
+Table Notification {
+    id INTEGER [primary key]
+    recipient_type VARCHAR(6) 
+    recipient_id INTEGER 
+    message VARCHAR 
+    sent_date DATETIME 
+    }
+
+Table Payment {
+    id INTEGER [primary key]
+    walk_request_id INTEGER 
+    payment_date DATETIME 
+    amount FLOAT 
+    }
+
+Table WalkRequest {
+    id INTEGER [primary key]
+    owner_id INTEGER 
+    walker_id INTEGER 
+    request_date DATETIME 
+    status VARCHAR(9) 
+    }
+
+Table Review {
+    id INTEGER [primary key]
+    walker_id INTEGER 
+    owner_id INTEGER 
+    rating INTEGER 
+    comments VARCHAR 
+    }
+
+Table SystemLog {
+    id INTEGER [primary key]
+    action_desc VARCHAR 
+    timestamp DATETIME 
+    }
+
+Table WalkRequestDog {
+    id INTEGER [primary key]
+    walk_request_id INTEGER 
+    dog_id INTEGER 
+    }
+
+Table WalkerAvailability {
+    id INTEGER [primary key]
+    walker_id INTEGER 
+    day_of_week VARCHAR(3) 
+    }
+
+Table WalkerHistory {
+    id INTEGER [primary key]
+    walker_id INTEGER 
+    walk_date DATETIME 
+    number_of_dogs INTEGER 
+    }
+
+Table WalkerPrice {
+    id INTEGER [primary key]
+    walker_id INTEGER 
+    dog_size VARCHAR(6) 
+    price FLOAT 
+    }
+
+
+
+// Relationships
+    Ref: Dog.(owner_id) < Owner.(id)
+    Ref: DogSizePriceHistory.(walker_id) < Walker.(id)
+    Ref: Payment.(walk_request_id) < WalkRequest.(id)
+    Ref: WalkRequest.(owner_id) < Owner.(id)
+    Ref: WalkRequest.(walker_id) < Walker.(id)
+    Ref: Review.(owner_id) < Owner.(id)
+    Ref: Review.(walker_id) < Walker.(id)
+    Ref: WalkRequestDog.(dog_id) < Dog.(id)
+    Ref: WalkRequestDog.(walk_request_id) < WalkRequest.(id)
+    Ref: WalkerAvailability.(walker_id) < Walker.(id)
+    Ref: WalkerHistory.(walker_id) < Walker.(id)
+    Ref: WalkerPrice.(walker_id) < Walker.(id)

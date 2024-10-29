@@ -1,0 +1,38 @@
+Use SQLAlchemy to create a sqlite database named system/genai/temp/model.sqlite  .
+
+The purpose of the database is: Create a dog walking business
+
+Walker Use Case
+A Dog Walker can self register (Walker.Name, Walker.PostalCode, Walker.Phone, Walker.Email) all required columns
+Dog Walker can select days of week (Mon, Tues, Wed, Thurs, Fri, Sat, Sun)  and times they are available (morning, afternoon)
+The Dog walker can set the maximum number of dogs per walk.
+Walker can set the price for a walk (range $10 to max $50) based on Dog.Size
+
+Owner Use Case
+Dog Owner can self register (Owner.Name, Owner, Address, Owner.Phone, Owner.Email) all required columns
+Owner can add one or more dogs (Dog.Name, Dog.Breed, Dog,Size [small, medium, large], Dog.Notes) 
+Owner can request a walk for one or more registered pets selecting Dog and matching available walker (day of week and time)
+Owners can only see their own records (Owner) and their own pets ( Dogs)
+Owners can see their historical WalkSchedule
+
+Payments Use Case
+Owner enters payment using 3rd party billing once the walk is completed.
+Payment is paid to Walker for Walk of one or more Dogs
+
+Administration Use Case
+The Business Administrator can see both Walkers and Owners records
+
+
+Create at least 15 tables.
+
+Hints: use autonum keys (for all tables - including for link/join/junction/intersection tables), allow nulls, foreign keys, no check constraints.
+If you choose to use a date, only use python datetime datatype.
+Remember that SQLite DateTime type only accepts Python datetime and date objects as input, this means you can not enter string attributes where a date or datetime object is expected.Provide a short description of each table. Include the description in each data model class docstring, prefixed with 'description: '. 
+Don't use python DECIMAL type.
+Don't install additional packages.
+Don't use the faker pip package.
+
+Create at least 60 rows of sample data: create at least one instance for every sqlalchemy class.
+Add some relationships and use foreign key columns instead of relationship names for the data inserts.
+Do not print the test data.
+Be sure to initialize derived attributes, but do not rely on LogicBank.
